@@ -6,5 +6,6 @@ module.exports = {
             warnings: false,
             errors: false,
         },
+        // lintOnSave: false
     }
 };
