@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <title>Document</title>
 </head>
 
@@ -14,13 +14,11 @@
 
     <script>
         function initTree(data) {
-            console.log('test ---')
-            let dx = 35
-            let dy = 52
-            const width = window.screen.width
+            let width = window.screen.width
 
+            let dy = width / 6
+            let dx = 10
             let margin = ({ top: 10, right: 120, bottom: 10, left: 40 })
-
             const root = d3.hierarchy(data);
 
             root.x0 = dy / 2;
@@ -28,7 +26,7 @@
             root.descendants().forEach((d, i) => {
                 d.id = i;
                 d._children = d.children;
-                // if (d.depth && d.data.name.length !== 7) d.children = null;
+                if (d.depth && d.data.name.length !== 7) d.children = null;
             });
 
             const svg = d3.select('#mainSvg')
@@ -50,9 +48,10 @@
                 const duration = d3.event && d3.event.altKey ? 2500 : 250;
                 const nodes = root.descendants().reverse();
                 const links = root.links();
+                let diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
 
+                tree = d3.tree().nodeSize([dx, dy])
                 // Compute the new tree layout.
-                let tree = d3.tree().nodeSize([dx, dy])
                 tree(root);
 
                 let left = root;
@@ -63,6 +62,7 @@
                 });
 
                 const height = right.x - left.x + margin.top + margin.bottom;
+
                 const transition = svg.transition()
                     .duration(duration)
                     .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
@@ -78,6 +78,7 @@
                     .attr("fill-opacity", 0)
                     .attr("stroke-opacity", 0)
                     .on("click", (event, d) => {
+                        console.log(' ---- click')
                         d.children = d.children ? null : d._children;
                         update(d);
                     });
@@ -113,7 +114,6 @@
                 const link = gLink.selectAll("path")
                     .data(links, d => d.target.id);
 
-                const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
                 // Enter any new links at the parent's previous position.
                 const linkEnter = link.enter().append("path")
                     .attr("d", d => {
@@ -140,9 +140,10 @@
             }
 
             update(root);
+            return svg.node();
         }
 
-        d3.json('./data.json').then(data => {
+        d3.json('./data2.json').then(data => {
             console.log('data', data)
             initTree(data)
         })
