@@ -2,7 +2,7 @@
   <div class="hello">
     -----
 
-
+   测试新文档
   </div>
 </template>
 
