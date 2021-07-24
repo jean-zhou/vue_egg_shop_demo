@@ -9,11 +9,11 @@ module.exports = {
   // ],
   parserOptions: {
     // parser: 'babel-eslint',
-    parser: 'module'
+    parser: 'vue-eslint-parser',
   },
-  plugins: [
-    'html'
-  ]
+  // plugins: [
+  //   'html'
+  // ]
   // rules: {
   //   // 'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   //   'no-console': 'off',
