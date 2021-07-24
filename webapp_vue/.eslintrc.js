@@ -1,5 +1,5 @@
 module.exports = {
-  // root: true,
+  root: true,
   // env: {
   //   node: true
   // },
@@ -7,9 +7,13 @@ module.exports = {
   //   'plugin:vue/essential',
   //   '@vue/standard'
   // ],
-  // parserOptions: {
-  //   parser: 'babel-eslint'
-  // },
+  parserOptions: {
+    // parser: 'babel-eslint',
+    parser: 'module'
+  },
+  plugins: [
+    'html'
+  ]
   // rules: {
   //   // 'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   //   'no-console': 'off',
