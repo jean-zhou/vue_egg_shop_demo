@@ -19,7 +19,9 @@
             let dy = width / 6
             let dx = 10
             let margin = ({ top: 10, right: 120, bottom: 10, left: 40 })
+            console.log("d3.hierarchy ------data", data);
             const root = d3.hierarchy(data);
+            console.log("d3.hierarchy ------", root);
 
             root.x0 = dy / 2;
             root.y0 = 0;
@@ -48,6 +50,11 @@
                 const duration = d3.event && d3.event.altKey ? 2500 : 250;
                 const nodes = root.descendants().reverse();
                 const links = root.links();
+                console.log("update  root", root);
+                console.log("update  nodes", nodes);
+                console.log("update  links", links);
+
+
                 let diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
 
                 tree = d3.tree().nodeSize([dx, dy])
