@@ -1,7 +1,7 @@
 <template>
   <div class="testTreePage">
     ----test
-    {{ moduleId }}
+    {{ treeData }}
   </div>
 </template>
 
