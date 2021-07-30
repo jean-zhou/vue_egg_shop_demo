@@ -31,8 +31,8 @@ export default {
         .x((d) => d.y)
         .y((d) => d.x);
 
-      let dx = 10;
-      let dy = 192;
+      let dx = 60; // 上下距离
+      let dy = 200;  // 左右距离
       const margin = { top: 10, right: 120, bottom: 10, left: 40 };
       const width = dy * 6;
       const root = d3.hierarchy(data);
