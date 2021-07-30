@@ -1,0 +1,97 @@
+{
+    "name": "volleybal",
+    "children": [
+        {
+            "name": "china",
+            "children": [
+                {
+                    "name": "spiker",
+                    "children": [
+                        {
+                            "name": "朱婷"
+                        },
+                        {
+                            "name": "张常宁"
+                        },
+                        {
+                            "name": "李莹莹"
+                        }
+                    ]
+                },
+                {
+                    "name": "blocker",
+                    "children": [
+                        {
+                            "name": "颜妮"
+                        },
+                        {
+                            "name": "袁心玥"
+                        }
+                    ]
+                },
+                {
+                    "name": "setter",
+                    "children": [
+                        {
+                            "name": "丁霞"
+                        }
+                    ]
+                },
+                {
+                    "name": "Free man",
+                    "children": [
+                        {
+                            "name": "王梦洁"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "usa",
+            "children": [
+                {
+                    "name": "spiker",
+                    "children": [
+                        {
+                            "name": "Hill"
+                        },
+                        {
+                            "name": "Larson"
+                        },
+                        {
+                            "name": "Thompson"
+                        }
+                    ]
+                },
+                {
+                    "name": "blocker",
+                    "children": [
+                        {
+                            "name": "Akinradewo"
+                        },
+                        {
+                            "name": "Robinson"
+                        }
+                    ]
+                },
+                {
+                    "name": "setter",
+                    "children": [
+                        {
+                            "name": "Glass"
+                        }
+                    ]
+                },
+                {
+                    "name": "Free man",
+                    "children": [
+                        {
+                            "name": "Lowe"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

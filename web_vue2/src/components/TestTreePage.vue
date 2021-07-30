@@ -31,8 +31,8 @@ export default {
         .x((d) => d.y)
         .y((d) => d.x);
 
-      let dx = 60; // 上下距离
-      let dy = 200;  // 左右距离
+      let dx = 30; // 上下距离
+      let dy = 100;  // 左右距离
       const margin = { top: 10, right: 120, bottom: 10, left: 40 };
       const width = dy * 6;
       const root = d3.hierarchy(data);
@@ -42,7 +42,7 @@ export default {
       root.descendants().forEach((d, i) => {
         d.id = i;
         d._children = d.children;
-        if (d.depth && d.data.name.length !== 7) d.children = null;
+        // if (d.depth && d.data.name.length !== 7) d.children = null;
       });
 
       const svg = d3
@@ -109,10 +109,14 @@ export default {
           });
 
         nodeEnter
-          .append("circle")
-          .attr("r", 2.5)
-          .attr("fill", (d) => (d._children ? "#555" : "#999"))
-          .attr("stroke-width", 10);
+          .append("rect")
+          // .attr("r", 2.5)
+           .attr("width", '60px')
+           .attr("height", '22px')
+          // .attr("fill", (d) => (d._children ? "#555" : "#999"))
+          .attr("fill", '#555')
+          .attr("stroke-width", 10)
+          .attr("rx", 5)
 
         nodeEnter
           .append("text")
