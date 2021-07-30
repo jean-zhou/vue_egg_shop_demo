@@ -2,7 +2,7 @@
     "name": "volleybal",
     "children": [
         {
-            "name": "china",
+            "name": "China",
             "children": [
                 {
                     "name": "spiker",
@@ -48,7 +48,7 @@
             ]
         },
         {
-            "name": "usa",
+            "name": "USA",
             "children": [
                 {
                     "name": "spiker",
