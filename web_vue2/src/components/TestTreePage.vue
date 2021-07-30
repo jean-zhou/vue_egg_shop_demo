@@ -1,6 +1,6 @@
 <template>
   <div class="testTreePage">
-    测试 d3 树 页面
+    <!-- 测试 d3 树 页面 -->
     <svg id="treeSvg"></svg>
   </div>
 </template>
@@ -17,32 +17,28 @@ export default {
   },
   created() {
     this.initTree();
-    // this.testD3();
   },
   methods: {
     async initTree() {
       let treeDataOri = await this.$api.testTreeData.getTreeData();
-      this.treeData = treeDataOri;
+      // this.treeData = treeDataOri;
       this.treeRender(treeDataOri.data);
     },
-    testD3() {
-      let test1 = d3.select("#treeSvg");
-      alert(test1);
-    },
     treeRender(data) {
-      // console.log("---data", data);
-      // let width = window.screen.width;
-      let width = 1200;
-      let height = 900;
+      console.log("---data", data);
+      const diagonal = d3
+        .linkHorizontal()
+        .x((d) => d.y)
+        .y((d) => d.x);
 
-      let dx = 36; // 上下边距
-      let dy = 52; // 左右边距
-
-      // let margin = { top: 10, right: 120, bottom: 10, left: 40 };
+      let dx = 10;
+      let dy = 192;
+      const margin = { top: 10, right: 120, bottom: 10, left: 40 };
+      const width = dy * 6;
       const root = d3.hierarchy(data);
+
       root.x0 = dy / 2;
       root.y0 = 0;
-      // console.log('root.descendants()', root.descendants())
       root.descendants().forEach((d, i) => {
         d.id = i;
         d._children = d.children;
@@ -51,10 +47,9 @@ export default {
 
       const svg = d3
         .select("#treeSvg")
-        // .attr("viewBox", [-margin.left, -margin.top, width, height])
-        .attr("viewBox", [0, 0, width, height])
-        .style("font", "10px sans-serif");
-      // .style("user-select", "none");
+        .attr("viewBox", [-margin.left, -margin.top, width, dx])
+        .style("font", "10px sans-serif")
+        .style("user-select", "none");
 
       const gLink = svg
         .append("g")
@@ -70,21 +65,11 @@ export default {
 
       function update(source) {
         const duration = d3.event && d3.event.altKey ? 2500 : 250;
-        console.log("update  root ------ ", root);
         const nodes = root.descendants().reverse();
         const links = root.links();
-        console.log("update  root", root);
-        console.log("update  nodes", nodes);
-        console.log("update  links", links);
 
-        let diagonal = d3
-          .linkHorizontal()
-          .x((d) => d.y)
-          .y((d) => d.x);
-
-        const tree = d3.tree().nodeSize([dx, dy]);
         // Compute the new tree layout.
-        tree(root);
+        d3.tree().nodeSize([dx, dy])(root);
 
         let left = root;
         let right = root;
@@ -93,30 +78,32 @@ export default {
           if (node.x > right.x) right = node;
         });
 
-        // const height = right.x - left.x + margin.top + margin.bottom;
+        const height = right.x - left.x + margin.top + margin.bottom;
 
         const transition = svg
           .transition()
           .duration(duration)
-          // .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
-          .attr("viewBox", [0, 0, width, height]);
-        // .tween(
-        //   "resize",
-        //   window.ResizeObserver ? null : () => () => svg.dispatch("toggle")
-        // );
+          .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
+          .tween(
+            "resize",
+            window.ResizeObserver ? null : () => () => svg.dispatch("toggle")
+          );
 
         // Update the nodes…
         const node = gNode.selectAll("g").data(nodes, (d) => d.id);
-        console.log("node", node);
+
         // Enter any new nodes at the parent's previous position.
         const nodeEnter = node
           .enter()
           .append("g")
-          .attr("transform", `translate(${source.y0},${source.x0})`)
+          // .attr("transform", (d) => `translate(${source.y0},${source.x0})`)
+          .attr("transform", (d) => {
+            console.log("source.y0, source.x0", source.y0, source.x0);
+            return `translate(${source.y0},${source.x0})`;
+          })
           .attr("fill-opacity", 0)
           .attr("stroke-opacity", 0)
           .on("click", (event, d) => {
-            console.log(" ---- click");
             d.children = d.children ? null : d._children;
             update(d);
           });
@@ -140,7 +127,7 @@ export default {
           .attr("stroke", "white");
 
         // Transition nodes to their new position.
-        node
+        const nodeUpdate = node
           .merge(nodeEnter)
           .transition(transition)
           .attr("transform", (d) => `translate(${d.y},${d.x})`)
@@ -148,23 +135,22 @@ export default {
           .attr("stroke-opacity", 1);
 
         // Transition exiting nodes to the parent's new position.
-        node
+        const nodeExit = node
           .exit()
           .transition(transition)
           .remove()
-          .attr("transform", `translate(${source.y},${source.x})`)
+          .attr("transform", (d) => `translate(${source.y},${source.x})`)
           .attr("fill-opacity", 0)
           .attr("stroke-opacity", 0);
 
         // Update the links…
-        console.log("links", links);
         const link = gLink.selectAll("path").data(links, (d) => d.target.id);
 
         // Enter any new links at the parent's previous position.
         const linkEnter = link
           .enter()
           .append("path")
-          .attr("d", () => {
+          .attr("d", (d) => {
             const o = { x: source.x0, y: source.y0 };
             return diagonal({ source: o, target: o });
           });
@@ -177,7 +163,7 @@ export default {
           .exit()
           .transition(transition)
           .remove()
-          .attr("d", () => {
+          .attr("d", (d) => {
             const o = { x: source.x, y: source.y };
             return diagonal({ source: o, target: o });
           });
@@ -190,8 +176,8 @@ export default {
       }
 
       update(root);
+
       return svg.node();
-      // document.appendChild(svg);
     },
   },
 };
