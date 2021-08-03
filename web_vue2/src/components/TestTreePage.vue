@@ -32,10 +32,17 @@ export default {
         .y((d) => d.x);
 
       let dx = 30; // 上下距离
-      let dy = 100;  // 左右距离
+      let dy = 100; // 左右距离
       const margin = { top: 10, right: 120, bottom: 10, left: 40 };
       const width = dy * 6;
       const root = d3.hierarchy(data);
+
+      let rectHeight = 22;
+      let rectWidth = 80;
+
+      let boxWidthy = rectWidth;
+      let boxWidthx = rectHeight / 2;
+      let linkWidthx = rectWidth;
 
       root.x0 = dy / 2;
       root.y0 = 0;
@@ -111,12 +118,12 @@ export default {
         nodeEnter
           .append("rect")
           // .attr("r", 2.5)
-           .attr("width", '60px')
-           .attr("height", '22px')
+          .attr("width", rectWidth + "px")
+          .attr("height", rectHeight + "px")
           // .attr("fill", (d) => (d._children ? "#555" : "#999"))
-          .attr("fill", '#555')
+          .attr("fill", "#555")
           .attr("stroke-width", 10)
-          .attr("rx", 5)
+          .attr("rx", 5);
 
         nodeEnter
           .append("text")
@@ -136,7 +143,10 @@ export default {
         const nodeUpdate = node
           .merge(nodeEnter)
           .transition(transition)
-          .attr("transform", (d) => `translate(${d.y},${d.x})`)
+          .attr(
+            "transform",
+            (d) => `translate(${d.y + boxWidthy * d.depth},${d.x - boxWidthx})`
+          )
           .attr("fill-opacity", 1)
           .attr("stroke-opacity", 1);
 
@@ -162,7 +172,14 @@ export default {
           });
 
         // Transition links to their new position.
-        link.merge(linkEnter).transition(transition).attr("d", diagonal);
+        link
+          .merge(linkEnter)
+          .attr(
+            "transform",
+            (d) => `translate(${(d.source.depth + 1) * linkWidthx},0)`
+          )
+          .transition(transition)
+          .attr("d", diagonal);
 
         // Transition exiting nodes to the parent's new position.
         link
