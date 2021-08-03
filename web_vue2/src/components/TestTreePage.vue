@@ -54,9 +54,11 @@ export default {
 
       const svg = d3
         .select("#treeSvg")
-        .attr("viewBox", [-margin.left, -margin.top, width, dx])
+        // .attr("viewBox", [-margin.left, -margin.top, width, dx])
+        .attr('width', '100vm')
+        .attr('height', '100vh')
         .style("font", "10px sans-serif")
-        .style("user-select", "none");
+        .style("user-select", "none")
 
       const gLink = svg
         .append("g")
