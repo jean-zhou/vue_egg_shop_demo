@@ -44,6 +44,8 @@ export default {
       let boxWidthx = rectHeight / 2;
       let linkWidthx = rectWidth;
 
+      let circleR = 6;
+
       root.x0 = dy / 2;
       root.y0 = 0;
       root.descendants().forEach((d, i) => {
@@ -55,10 +57,10 @@ export default {
       const svg = d3
         .select("#treeSvg")
         // .attr("viewBox", [-margin.left, -margin.top, width, dx])
-        .attr('width', '100vm')
-        .attr('height', '100vh')
+        .attr("width", "100vm")
+        .attr("height", "100vh")
         .style("font", "10px sans-serif")
-        .style("user-select", "none")
+        .style("user-select", "none");
 
       const gLink = svg
         .append("g")
@@ -111,11 +113,11 @@ export default {
             return `translate(${source.y0},${source.x0})`;
           })
           .attr("fill-opacity", 0)
-          .attr("stroke-opacity", 0)
-          .on("click", (event, d) => {
-            d.children = d.children ? null : d._children;
-            update(d);
-          });
+          .attr("stroke-opacity", 0);
+        // .on("click", (event, d) => {
+        //   d.children = d.children ? null : d._children;
+        //   update(d);
+        // });
 
         nodeEnter
           .append("rect")
@@ -123,8 +125,9 @@ export default {
           .attr("width", rectWidth + "px")
           .attr("height", rectHeight + "px")
           // .attr("fill", (d) => (d._children ? "#555" : "#999"))
-          .attr("fill", "#555")
-          .attr("stroke-width", 10)
+          .attr("fill", "#f47920")
+          .attr("stroke-width", 1)
+          .attr("stroke", "#999")
           .attr("rx", 5);
 
         nodeEnter
@@ -141,6 +144,19 @@ export default {
           .attr("stroke-width", 3)
           .attr("stroke", "white");
 
+        nodeEnter
+          .append("circle")
+          .attr("r", (d) => (d.children ? circleR : 0))
+          .attr("fill", (d) => (d._children ? "#555" : "#999"))
+          .attr("stroke-width", 10)
+          .attr(
+            "transform",
+            (d) => `translate(${boxWidthy + circleR / 2},${boxWidthx})`
+          )
+          .on("click", (event, d) => {
+            d.children = d.children ? null : d._children;
+            update(d);
+          });
         // Transition nodes to their new position.
         const nodeUpdate = node
           .merge(nodeEnter)
