@@ -135,7 +135,7 @@ export default {
           // .attr("dy", "0.31em")
           .attr("dx", "12")
           .attr("dy", "12")
-          .attr("x", (d) => (d._children ? -6 : 6))
+          .attr("x", (d) => (d._children ? 0 : 0))
           .attr("text-anchor", (d) => (d._children ? "start" : "start"))
           .text((d) => d.data.name)
           .clone(true)
