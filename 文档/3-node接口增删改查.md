@@ -25,18 +25,30 @@
 
 
 
-2，增
+2， 增 - 改
 
 ```js
-    // 增
+    // 增 - 改
     async addTodos() {
         const { ctx } = this
         let todo = ctx.request.body
         let id = todo.id
         let time = todo.time
         let thing = todo.thing
+        let updateStatus = false
+        if (id === '' || time === '' || thing === '') {
+            ctx.redirect('/test/todo')
+            return
+        }
 
-        if (id !== '' || time !== '' || thing !== '') {
+        todos.forEach(i => {
+            if (i.id === id) {
+                i.time = time
+                i.thing = thing
+                updateStatus = true
+            }
+        })
+        if (!updateStatus) {
             todos.push(todo)
         }
         ctx.redirect('/test/todo')
@@ -44,4 +56,8 @@
 ```
 
 3，删
+
+```js
+
+```
 

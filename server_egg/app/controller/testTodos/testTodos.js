@@ -38,19 +38,36 @@ class TodoController extends Controller {
         ctx.body = formHtml + ulHtml
     }
 
-    // 增
+    // 增 - 改
     async addTodos() {
         const { ctx } = this
         let todo = ctx.request.body
         let id = todo.id
         let time = todo.time
         let thing = todo.thing
-
-        if (id !== '' || time !== '' || thing !== '') {
-            todos.push(todo)
+        let updateStatus = false
+        if (id === '' || time === '' || thing === '') {
+            ctx.redirect('/test/todo')
+            return
         }
 
+        todos.forEach(i => {
+            if (i.id === id) {
+                i.time = time
+                i.thing = thing
+                updateStatus = true
+            }
+        })
+        if (!updateStatus) {
+            todos.push(todo)
+        }
         ctx.redirect('/test/todo')
+    }
+
+    async searchTodo() {
+        const { ctx } = this
+        // get 请求参数 params  请求query
+        ctx.body = `search: ${ctx.params.id} - ${ctx.query.time} -  ${ctx.query.name}`
     }
 }
 module.exports = TodoController
